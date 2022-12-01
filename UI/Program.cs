@@ -1,13 +1,20 @@
 ﻿var input = File.ReadAllLines("C:/Projects/Advent of Code 2022/UI/Day1.txt");
 var current = 0;
-var largest = 0;
+var numberOfItemsToTrack = 3;
+var largestItems = Array.Empty<int>();
+
 foreach (var line in input)
 {
     if (line.Length == 0)
     {
-        if (current > largest)
+        if (largestItems.Length < numberOfItemsToTrack)
         {
-            largest = current;
+            largestItems = largestItems.Append(current).OrderBy(x => x).ToArray();
+        }
+        else if (current > largestItems[0])
+        {
+            var newLargestItems = largestItems.Skip(1).Append(current).OrderBy(x => x).ToArray();
+            largestItems = newLargestItems;
         }
 
         current = 0;
@@ -17,4 +24,11 @@ foreach (var line in input)
         current += int.Parse(line);
     }
 }
-Console.WriteLine(largest);
+
+if (current > largestItems[0])
+{
+    var newLargestItems = largestItems.Skip(1).Append(current).OrderBy(x => x).ToArray();
+    largestItems = newLargestItems;
+}
+
+Console.WriteLine(largestItems.Sum());
